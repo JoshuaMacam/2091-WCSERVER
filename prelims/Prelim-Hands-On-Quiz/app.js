@@ -1,3 +1,6 @@
+//Joshua Emmanuel Macam
+//WD-201
+
 const calc = require('./calculation.js');
 
 console.log('addition 2 + 2 = ', calc.add(2, 2));
