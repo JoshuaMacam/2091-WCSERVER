@@ -1,22 +1,56 @@
-//1. Installing Express
-//2. Installing libraries/dependencies
-//3. Require statements
-
 const express = require('express');
 const app = express();
 
-//4. use the middleware required for serving static
-
 app.use(express.static('public'));
 
-//create the route to serve a static index.html
-app.get('/', (req, res) => {
-res.sendFile(__dirname + '/' + 'index.html');
+const path = require('path');
+const mime = require('mime-types');
+const multer = require('multer');
+
+const fileStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
 });
 
+const upload = multer({ storage: fileStorage });
 
-//Setting the listener to ENV PORT info
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-console.log(`Listening on port ${port}`)
-})
+app.post('/uploads', upload.single('myFile'), (req, res) => {
+  console.log(req.file);
+
+  req.file.mimetype = mime.lookup(req.file.originalname);
+
+  res.sendFile(path.join(__dirname, 'file-uploaded.html'));
+});
+
+app.get('/file-upload', (req, res) => {
+  res.sendFile(__dirname + '/' + 'file-upload.html');
+});
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/' + 'index.html');
+});
+
+app.use(express.urlencoded());
+
+app.get('/', (req, res, next) => {
+  res.send(`<form method="POST" action="/">
+  <input type="text" name="name" placeholder="name">
+  <input type="text" name="subject" placeholder="subject">
+  <input type="text" name="email" placeholder="email" >
+  <input type="text" name="message" placeholder="message" >
+
+  <input type="submit">
+</form>`);
+});
+
+app.post('/', function (req, res, next) {
+  res.send(JSON.stringify(req.body));
+});
+
+app.listen(3000, function () {
+  console.log('Server is running on port 3000');
+});
