@@ -22,10 +22,17 @@ app.get('/api/dishes', (req, res) => {
   res.send(dishes);
 });
 
-app.get('/api/dishes/:type', (req, res) => {
-  const dishes = dishes.find((h) => h.type === parseInt(req.params.type));
-  if (!dishes) return res.status(404).send('Record not found');
-  res.send(dishes);
+app.get('/api/dishes/:search', (req, res) => {
+  const search = req.params.search;
+  const dish = dishes.find(
+    (h) =>
+      h.type.toLowerCase().includes(search.toLowerCase()) ||
+      h.province.toLowerCase().includes(search.toLocaleLowerCase()) ||
+      h.price === parseInt(search)
+  );
+
+  if (!dish) return res.status(404).send('Record not found');
+  res.send(dish);
 });
 
 app.listen(3000, () => {
