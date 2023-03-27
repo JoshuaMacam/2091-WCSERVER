@@ -9,13 +9,31 @@
     <title>Vue JS Demonstration Discussion</title>
   </head>
   <body>
-    <!-- Create a div tag with "app" ID-->
-    <div id="app">
-      <p>{{ title }} - {{ author }} - {{ age }}</p>
-      <!-- Events on Vue using v-on -->
-      <button v-on:click="age++">Get Older</button>
-      <button v-on:click="age--">Get Younger</button>
+    <div id="conditional-rendering">
+      <span v-if="seen">Now you see me</span>
     </div>
-    <script src="app.js"></script>
+
+    <script src="conditionalif.js"></script>
+
+    <div id="books">
+      <div v-if="showBooks">
+        <p>{{ btitle }} - {{ bauthor }} - {{ year }}</p>
+      </div>
+
+      <button @click="toggleShowBooks">
+        <span v-if="showBooks">Hide Books</span>
+        <span v-else>Show Books</span>
+      </button>
+    </div>
+
+    <script src="if-else.js"></script>
+
+    <div id="list-rendering">
+      <ol>
+        <li v-for="todo in todos">{{ todo.text }}</li>
+      </ol>
+    </div>
+
+    <script src="for.js"></script>
   </body>
 </html>
